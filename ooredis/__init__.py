@@ -9,6 +9,8 @@ import typing as t
 
 from functools import cached_property
 
+__version__ = "0.0.2"
+
 class RedisDict(MutableMapping):
     """Creates or connects to an existing Redis hashmap -
     any changes in key/values change the underlying redis data structure.

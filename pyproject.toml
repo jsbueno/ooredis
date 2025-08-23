@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+packages = ["ooredis"]
+
+[tool.setuptools.dynamic]
+version = {attr = "ooredis.__version__"}
+
+[project]
+name = "ooredis"
+dynamic = ["version"]
+description = ""
+readme = {file = "README.md", content-type = "text/markdown"}
+license = { file="LICENSE" }
+requires-python = ">= 3.12"
+authors = [{ name = "Joao S. O. Bueno", email = "gwidion@gmail.com" }]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+repository = "https://github.com/jsbueno/ooredis"
+
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "redis",
+]
+
+
+[tool.pytest.ini_options]
+testpaths = "tests"
+python_files = "test_*.py"
+python_functions = "test_*"
+addopts = "-v --doctest-modules"
+asyncio_default_fixture_loop_scope = "function"
+
+
+
