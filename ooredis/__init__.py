@@ -42,21 +42,21 @@ class RedisDict(MutableMapping):
     def __init__(
         self,
         redis_conn: Redis,
-        name: str,
+        name: t.Optional[str] = None,
         prefix: str | bytes | bytearray = "",
         key: bytes | bytearray = b"",
         data: t.Optional[Mapping] = None,
-        /,
-        **kwargs,
     ):
         """\
             Args:
                 redis_conn: a redis-connection compatible connection - can work
                     with other software providing the redis protocol, as long as they
                     have the basic Hash commands
-                name: The key name for this hash in the Redis database
+                name: The key name for this hash in the Redis database. If not given
+                    a UUID identifier will be generated.
                 prefix: an optional prefix to the name - so keys related
-                    to the same application will share a common prefix.
+                    to the same application will share a common prefix. If not given,
+                    an empty prefix is assumed.
                 key: a byte sequence used as secret to an hmac hash which
                     signs all values stored in redis - the main purpose
                     is preventing tampered data to be run through pickle.loads
@@ -65,7 +65,7 @@ class RedisDict(MutableMapping):
                         TBD: use hmset to initialize initial data, instead of key by key
         """
         self.redis = redis_conn
-        self.name = name
+        self.name = name or str(uuid.uuid4())
         if isinstance(prefix, bytes | bytearray):
             prefix = prefix.decode()
         self.prefix = prefix or ""
@@ -79,7 +79,6 @@ class RedisDict(MutableMapping):
 
         if data:
             self.update(data)
-        self.update(kwargs)
 
     @cached_property
     def _redis_name(self):
